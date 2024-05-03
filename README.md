@@ -1,16 +1,16 @@
-# Начну с выполненного задания. Отправлены 4 файла:
+`# Начну с выполненного задания. Отправлены 4 файла:`
 1) README.md - описание всей проеланной работы.
 2) Vagrantfile - итоговый вагрант-файл
 3) Vagrantfile_old - изначальный рабочий вагрант-файл.
 4) zfs.sh - скрипт для конфигурирования сервера
 
-# Сразу напишу, что при запуске vagrant-файла, предоставленного в методичке автоматически не устанавливалась ZFS, остальное ставилось. При этом руками всё доставлялось прекрасно.
-# Я пробовал менять параметры, убил очень много времени.
-# Пробовал в том числе обновлять пакеты, но ни к чему хорошему это не привело, стало только ещё хуже.
-# И уже когда я не знал, что делать, заработал оригинальный файл с методички, непонятно почему. И всё работает, повторял несколько раз.
-# Пишу, дабы быть честным. В чём проблема, не могу сказать. Каждый раз работа с вагрантом начинается со спецоперации.
+`# Сразу напишу, что при запуске vagrant-файла, предоставленного в методичке автоматически не устанавливалась ZFS, остальное ставилось. При этом руками всё доставлялось прекрасно.`
+`# Я пробовал менять параметры, убил очень много времени.`
+`# Пробовал в том числе обновлять пакеты, но ни к чему хорошему это не привело, стало только ещё хуже.`
+`# И уже когда я не знал, что делать, заработал оригинальный файл с методички, непонятно почему. И всё работает, повторял несколько раз.`
+`# Пишу, дабы быть честным. В чём проблема, не могу сказать. Каждый раз работа с вагрантом начинается со спецоперации.`
 
-# Задание 1
+`# Задание 1`
 
 lsblk                                               # просматриваем свои диски
 
@@ -27,7 +27,7 @@ sdg      8:96   0  512M  0 disk
 sdh      8:112  0  512M  0 disk 
 sdi      8:128  0  512M  0 disk
 
-# Создаём пул из двух дисков в режиме RAID 1
+`# Создаём пул из двух дисков в режиме RAID 1`
 
 zpool create otus1 mirror /dev/sdb /dev/sdc
 zpool create otus4 mirror /dev/sdd /dev/sde
@@ -43,14 +43,14 @@ otus2   480M  91.5K   480M        -         -     0%     0%  1.00x    ONLINE  -
 otus3   480M  91.5K   480M        -         -     0%     0%  1.00x    ONLINE  -
 otus4   480M  91.5K   480M        -         -     0%     0%  1.00x    ONLINE  -
 
-# пробуем разные варианты компрессии
+`# пробуем разные варианты компрессии`
 
 zfs set compression=lzjb otus1
 zfs set compression=lz4 otus2
 zfs set compression=gzip-9 otus3
 zfs set compression=zle otus4
 
-# проверяем
+`# проверяем`
 
 zfs get all | grep compression
 
@@ -60,7 +60,7 @@ otus2  compression           lz4                    local
 otus3  compression           gzip-9                 local
 otus4  compression           zle                    local
 
-# Скачаем один и тот же текстовый файл во все пулы: 
+`# Скачаем один и тот же текстовый файл во все пулы: `
 for i in {1..4}; do wget -P /otus$i https://gutenberg.org/cache/epub/2600/pg2600.converter.log; done
 
 ls -l /otus*                                        # проверяем, что файл скачался
@@ -99,11 +99,11 @@ otus2  compressratio         2.23x                  -
 otus3  compressratio         3.66x                  -
 otus4  compressratio         1.00x                  -
 
-# делаем вывод, что gzip-9 наиболее эффективен для сжатия
+`# делаем вывод, что gzip-9 наиболее эффективен для сжатия`
 
-# Определение настроек пула
+`# Определение настроек пула`
 
-# скачиваем архив в домашний каталог по рекомендациям из методички и разархивируем его.
+`# скачиваем архив в домашний каталог по рекомендациям из методички и разархивируем его.`
 wget -O archive.tar.gz --no-check-certificate 'https://drive.usercontent.google.com/download?id=1MvrcEp-WgAQe57aDEzxSRalPAwbNN1Bb&export=download' 
 tar -xzvf archive.tar.gz
 
@@ -204,15 +204,15 @@ config:
 
 errors: No known data errors
 
-# Задание 2
+`# Задание 2`
 
-# проверяем настройки пула и запрашиваем параметры файловой системы
+`# проверяем настройки пула и запрашиваем параметры файловой системы`
 zpool get all otus
 zfs get all otus
 
-# по домашнему заданию определяем:
+`# по домашнему заданию определяем:`
 
-# размер хранилища
+`# размер хранилища`
 
 zfs get available otus
 
@@ -220,7 +220,7 @@ zfs get available otus
 NAME  PROPERTY   VALUE  SOURCE
 otus  available  350M   -
 
-# тип pool
+`# тип pool`
 
 zfs get readonly otus
 
@@ -228,7 +228,7 @@ zfs get readonly otus
 NAME  PROPERTY  VALUE   SOURCE
 otus  readonly  off     default
 
-# значение recordsize
+`# значение recordsize`
 
 zfs get recordsize otus
 
@@ -236,7 +236,7 @@ zfs get recordsize otus
 NAME  PROPERTY    VALUE    SOURCE
 otus  recordsize  128K     local
 
-# какое сжатие используется
+`# какое сжатие используется`
 
 zfs get compression otus
 
@@ -244,7 +244,7 @@ zfs get compression otus
 NAME  PROPERTY     VALUE     SOURCE
 otus  compression  zle       local
 
-# какая контрольная сумма используется
+`# какая контрольная сумма используется`
 
 zfs get checksum otus
 
@@ -252,9 +252,9 @@ zfs get checksum otus
 NAME  PROPERTY  VALUE      SOURCE
 otus  checksum  sha256     local
 
-# Задание 3
+`# Задание 3`
 
-# Работа со снапшотами
+`# Работа со снапшотами`
 
 wget -O otus_task2.file --no-check-certificate https://drive.usercontent.google.com/download?id=1wgxjih8YZ-cqLqaZVa0lA3h3Y029c3oI&export=download   # скачиваем файл, как указано в методичке
 
